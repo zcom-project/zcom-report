@@ -1,0 +1,50 @@
+{
+  "name": "zcom-report",
+  "version": "0.1.2",
+  "description": "Create a CSV export of content from the Zcom Blockchain for use with Cointracking.info",
+  "main": "./dist/index.js",
+  "jsnext:main": "./es/index.js",
+  "author": "zcom",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^2.6.0",
+    "csv": "^3.0.2",
+    "moment": "^2.22.0",
+    "node-fetch": "^2.2.0"
+  },
+  "devDependencies": {
+    "assert": "^1.4.1",
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.2.3",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-1": "^6.24.1",
+    "browserify": "^16.2.2",
+    "cross-env": "^5.0.1",
+    "eslint": "^4.19.1",
+    "husky": "^0.14.3",
+    "mkdirp": "^0.5.1",
+    "mocha": "^5.2.0",
+    "prettier": "^1.11.1",
+    "pretty-quick": "^1.4.1",
+    "rimraf": "^2.6.1",
+    "uglify-js": "^3.3.10",
+    "zcomjs": "^0.1.2"
+  },
+  "peerDependencies": {
+    "zcomjs": "^0.1.2"
+  },
+  "scripts": {
+    "start": "cross-env NODE_ENV=node node lib/src/app.js",
+    "build:watch": "babel lib -d dist --watch",
+    "clean": "rimraf dist build es",
+    "prebuild": "npm run clean",
+    "build": "cross-env BABEL_ENV=cjs babel lib -d dist",
+    "build-es": "cross-env BABEL_ENV=es babel lib -d es",
+    "postbuild": "npm run build-es",
+    "precommit": "pretty-quick --staged",
+    "prebrowserify": "npm run build",
+    "browserify": "cross-env NODE_ENV=production browserify dist/index.js --standalone index -o build/index.js -d",
+    "postbrowserify": "cross-env NODE_ENV=production uglifyjs --compress --mangle --sequences --drop_console --mangle-props --screw-ie8 --output build/index.min.js -- build/index.js"
+  }
+}
